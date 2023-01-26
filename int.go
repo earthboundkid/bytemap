@@ -77,13 +77,22 @@ func (m *Int) ToMap() map[byte]int {
 	return m2
 }
 
-// ToBool makes a map[byte]bool from the bytemap.
-func (m *Int) ToBool() map[byte]bool {
-	m2 := make(map[byte]bool)
+// ToBool makes a Bool from the bytemap.
+func (m *Int) ToBool() *Bool {
+	var m2 Bool
 	for i := range m {
 		m2[byte(i)] = m[i] > 0
 	}
-	return m2
+	return &m2
+}
+
+// ToFloat makes a Float from the bytemap.
+func (m *Int) ToFloat() *Float {
+	var m2 Float
+	for i := range m {
+		m2[byte(i)] = float64(m[i])
+	}
+	return &m2
 }
 
 // Equals reports if two Ints are equal.
