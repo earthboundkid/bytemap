@@ -139,23 +139,51 @@ func FuzzBoolToMap(f *testing.F) {
 		if !maps.Equal(aNaive, aMap.ToMap()) {
 			t.Fatal(a, aMap)
 		}
-		testGet(t, aMap, aNaive)
+		testBoolGet(t, aMap, aNaive)
 		bNaive := naiveMap(b)
 		bMap := bytemap.Make(b)
 		if !maps.Equal(bNaive, bMap.ToMap()) {
 			t.Fatal(b, bMap)
 		}
-		testGet(t, bMap, bNaive)
+		testBoolGet(t, bMap, bNaive)
 		if maps.Equal(aNaive, bNaive) != aMap.Equals(bMap) {
 			t.Fatal(aMap, bMap)
 		}
 	})
 }
 
-func testGet(t *testing.T, m1 *bytemap.Bool, m2 map[byte]bool) {
+func testBoolGet(t *testing.T, m1 *bytemap.Bool, m2 map[byte]bool) {
 	for i := 0; i < bytemap.Size; i++ {
 		if m1.Get(byte(i)) != m2[byte(i)] {
 			t.Fatal(i, m1)
 		}
 	}
+}
+func FuzzBoolSet(f *testing.F) {
+	f.Add("", "", "")
+	f.Add("a", "a", "a")
+	f.Add("abc", "bcde", "b")
+	f.Fuzz(func(t *testing.T, add, remove, restore string) {
+		var bf bytemap.Bool
+		m := make(map[byte]bool)
+		for _, c := range []byte(add) {
+			bf.Set(c, true)
+			m[c] = true
+		}
+		for _, c := range []byte(remove) {
+			bf.Set(c, false)
+			m[c] = false
+		}
+		for _, c := range []byte(restore) {
+			bf.Set(c, true)
+			m[c] = true
+		}
+		// Fill in blanks
+		for i := 0; i < bytemap.Size; i++ {
+			m[byte(i)] = m[byte(i)]
+		}
+		if !maps.Equal(bf.ToMap(), m) {
+			t.Fatal(bf)
+		}
+	})
 }

@@ -89,7 +89,12 @@ func (m *Bool) Equals(other *Bool) bool {
 	return *m == *other
 }
 
+// Set sets one byte in the Bool byte map.
+func (m *Bool) Set(key byte, value bool) {
+	m[key] = value
+}
+
 // Get looks up one byte in the Bool byte map.
-func (m *Bool) Get(c byte) bool {
-	return m[c]
+func (m *Bool) Get(key byte) bool {
+	return m[key]
 }

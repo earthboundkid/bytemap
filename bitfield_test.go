@@ -119,3 +119,32 @@ func testBitFieldGet(t *testing.T, m1 *bytemap.BitField, m2 map[byte]bool) {
 		}
 	}
 }
+
+func FuzzBitFieldSet(f *testing.F) {
+	f.Add("", "", "")
+	f.Add("a", "a", "a")
+	f.Add("abc", "bcde", "b")
+	f.Fuzz(func(t *testing.T, add, remove, restore string) {
+		var bf bytemap.BitField
+		m := make(map[byte]bool)
+		for _, c := range []byte(add) {
+			bf.Set(c, true)
+			m[c] = true
+		}
+		for _, c := range []byte(remove) {
+			bf.Set(c, false)
+			m[c] = false
+		}
+		for _, c := range []byte(restore) {
+			bf.Set(c, true)
+			m[c] = true
+		}
+		// Fill in blanks
+		for i := 0; i < bytemap.Size; i++ {
+			m[byte(i)] = m[byte(i)]
+		}
+		if !maps.Equal(bf.ToMap(), m) {
+			t.Fatal(bf)
+		}
+	})
+}

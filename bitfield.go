@@ -97,9 +97,21 @@ func (m *BitField) Equals(other *BitField) bool {
 	return *m == *other
 }
 
+// Set sets one byte in the Bitfield byte map
+func (m *BitField) Set(key byte, value bool) {
+	i := key / 8
+	if value {
+		mask := byte(1 << (key % 8))
+		m[i] |= mask
+	} else {
+		mask := ^byte(1 << (key % 8))
+		m[i] &= mask
+	}
+}
+
 // Get looks up one byte in the BitField byte map.
-func (m *BitField) Get(c byte) bool {
-	mask := byte(1 << (c % 8))
-	masked := m[c/8] & mask
+func (m *BitField) Get(key byte) bool {
+	mask := byte(1 << (key % 8))
+	masked := m[key/8] & mask
 	return masked != 0
 }
