@@ -98,3 +98,9 @@ func (m *Bool) Set(key byte, value bool) {
 func (m *Bool) Get(key byte) bool {
 	return m[key]
 }
+
+// Clone copies m.
+func (m *Bool) Clone() *Bool {
+	m2 := *m
+	return &m2
+}

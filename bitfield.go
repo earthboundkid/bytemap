@@ -115,3 +115,9 @@ func (m *BitField) Get(key byte) bool {
 	masked := m[key/8] & mask
 	return masked != 0
 }
+
+// Clone copies m.
+func (m *BitField) Clone() *BitField {
+	m2 := *m
+	return &m2
+}
