@@ -53,9 +53,9 @@ func (m *BitField) Contains(s string) bool {
 // ContainsBytes reports whether all bytes in b are already in m.
 func (m *BitField) ContainsBytes(b []byte) bool {
 	for _, c := range b {
-		i := c / 8
 		mask := byte(1 << (c % 8))
-		if m[i]&mask == 0 {
+		masked := m[c/8] & mask
+		if contains := masked != 0; !contains {
 			return false
 		}
 	}
@@ -92,6 +92,14 @@ func (m *BitField) ToMap() map[byte]bool {
 	return m2
 }
 
+// Equals reports if two BitFields are equal.
 func (m *BitField) Equals(other *BitField) bool {
 	return *m == *other
+}
+
+// Get looks up one byte in the BitField byte map.
+func (m *BitField) Get(c byte) bool {
+	mask := byte(1 << (c % 8))
+	masked := m[c/8] & mask
+	return masked != 0
 }

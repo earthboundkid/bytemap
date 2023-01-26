@@ -99,13 +99,23 @@ func FuzzBitFieldToMap(f *testing.F) {
 			t.Fatalf("input=%q want=%v got=%v",
 				a, aNaive, aMap.ToMap())
 		}
+		testBitFieldGet(t, aMap, aNaive)
 		bNaive := naiveMap(b)
 		bMap := bytemap.MakeBitField(b)
 		if !maps.Equal(bNaive, bMap.ToMap()) {
 			t.Fatal(b, bMap)
 		}
+		testBitFieldGet(t, bMap, bNaive)
 		if maps.Equal(aNaive, bNaive) != aMap.Equals(bMap) {
 			t.Fatal(aMap, bMap)
 		}
 	})
+}
+
+func testBitFieldGet(t *testing.T, m1 *bytemap.BitField, m2 map[byte]bool) {
+	for i := 0; i < bytemap.Size; i++ {
+		if m1.Get(byte(i)) != m2[byte(i)] {
+			t.Fatal(i, m1)
+		}
+	}
 }

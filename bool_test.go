@@ -139,13 +139,23 @@ func FuzzBoolToMap(f *testing.F) {
 		if !maps.Equal(aNaive, aMap.ToMap()) {
 			t.Fatal(a, aMap)
 		}
+		testGet(t, aMap, aNaive)
 		bNaive := naiveMap(b)
 		bMap := bytemap.Make(b)
 		if !maps.Equal(bNaive, bMap.ToMap()) {
 			t.Fatal(b, bMap)
 		}
+		testGet(t, bMap, bNaive)
 		if maps.Equal(aNaive, bNaive) != aMap.Equals(bMap) {
 			t.Fatal(aMap, bMap)
 		}
 	})
+}
+
+func testGet(t *testing.T, m1 *bytemap.Bool, m2 map[byte]bool) {
+	for i := 0; i < bytemap.Size; i++ {
+		if m1.Get(byte(i)) != m2[byte(i)] {
+			t.Fatal(i, m1)
+		}
+	}
 }

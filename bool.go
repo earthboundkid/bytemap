@@ -84,6 +84,12 @@ func (m *Bool) ToMap() map[byte]bool {
 	return m2
 }
 
+// Equals reports if two Bools are equal.
 func (m *Bool) Equals(other *Bool) bool {
 	return *m == *other
+}
+
+// Get looks up one byte in the Bool byte map.
+func (m *Bool) Get(c byte) bool {
+	return m[c]
 }
