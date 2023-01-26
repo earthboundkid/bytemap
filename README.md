@@ -1,2 +1,2 @@
-# bytemap
+# bytemap [![GoDoc](https://godoc.org/github.com/carlmjohnson/bytemap?status.svg)](https://godoc.org/github.com/carlmjohnson/bytemap) [![Go Report Card](https://goreportcard.com/badge/github.com/carlmjohnson/bytemap)](https://goreportcard.com/report/github.com/carlmjohnson/bytemap) [![Gocover.io](https://gocover.io/_badge/github.com/carlmjohnson/bytemap)](https://gocover.io/github.com/carlmjohnson/bytemap)
 Bytemap contains types for making from bytes to bool, integer, or float using a backing array
