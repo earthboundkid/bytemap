@@ -2,12 +2,16 @@ package bytemap
 
 import "io"
 
+// BitFieldLen is the length of a BitField array
+const BitFieldLen = Len / 8
+
 // BitField is a map from byte to bool backed by a bit field.
 // It is not as fast as Bool,
 // but if memory is an important consideration,
 // it is 8 times smaller.
-type BitField [Size / 8]byte
+type BitField [BitFieldLen]byte
 
+// MakeBitField initializes a BitField from a string or []byte seq.
 func MakeBitField[byteseq []byte | string](s byteseq) *BitField {
 	var m BitField
 	for _, c := range []byte(s) {
@@ -84,7 +88,7 @@ func (m *BitField) ContainsReader(r io.Reader) (bool, error) {
 // ToMap makes a map[byte]bool from the bytemap.
 func (m *BitField) ToMap() map[byte]bool {
 	m2 := make(map[byte]bool)
-	for c := 0; c < Size; c++ {
+	for c := 0; c < 256; c++ {
 		mask := byte(1 << (c % 8))
 		masked := m[c/8] & mask
 		m2[byte(c)] = masked != 0

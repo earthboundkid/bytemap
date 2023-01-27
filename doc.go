@@ -3,5 +3,5 @@
 // The maps are backed by arrays of 256 entries.
 package bytemap
 
-// Size is the size of a byte map array, 256.
-const Size = 1 << 8
+// Len is the length of a byte map array, 256 items.
+const Len = 1 << 8

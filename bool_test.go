@@ -15,7 +15,7 @@ func naiveMap(charset string) map[byte]bool {
 		m[c] = true
 	}
 	// fill out rest of the map
-	for c := 0; c < bytemap.Size; c++ {
+	for c := 0; c < bytemap.Len; c++ {
 		m[byte(c)] = m[byte(c)]
 	}
 	return m
@@ -153,7 +153,7 @@ func FuzzBoolToMap(f *testing.F) {
 }
 
 func testBoolGet(t *testing.T, m1 *bytemap.Bool, m2 map[byte]bool) {
-	for i := 0; i < bytemap.Size; i++ {
+	for i := 0; i < bytemap.Len; i++ {
 		if m1.Get(byte(i)) != m2[byte(i)] {
 			t.Fatal(i, m1)
 		}
@@ -179,7 +179,7 @@ func FuzzBoolSet(f *testing.F) {
 			m[c] = true
 		}
 		// Fill in blanks
-		for i := 0; i < bytemap.Size; i++ {
+		for i := 0; i < bytemap.Len; i++ {
 			m[byte(i)] = m[byte(i)]
 		}
 		if !maps.Equal(bf.ToMap(), m) {

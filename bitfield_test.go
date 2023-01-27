@@ -113,7 +113,7 @@ func FuzzBitFieldToMap(f *testing.F) {
 }
 
 func testBitFieldGet(t *testing.T, m1 *bytemap.BitField, m2 map[byte]bool) {
-	for i := 0; i < bytemap.Size; i++ {
+	for i := 0; i < bytemap.Len; i++ {
 		if m1.Get(byte(i)) != m2[byte(i)] {
 			t.Fatal(i, m1)
 		}
@@ -140,7 +140,7 @@ func FuzzBitFieldSet(f *testing.F) {
 			m[c] = true
 		}
 		// Fill in blanks
-		for i := 0; i < bytemap.Size; i++ {
+		for i := 0; i < bytemap.Len; i++ {
 			m[byte(i)] = m[byte(i)]
 		}
 		if !maps.Equal(bf.ToMap(), m) {

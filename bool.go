@@ -5,7 +5,7 @@ import (
 )
 
 // Bool is an array backed map from byte to bool.
-type Bool [Size]bool
+type Bool [Len]bool
 
 // Make initializes a bytemap.Bool with a byte sequence.
 func Make[byteseq []byte | string](seq byteseq) *Bool {

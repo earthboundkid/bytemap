@@ -7,7 +7,7 @@ import (
 )
 
 // Float is an array backed map from byte to float64.
-type Float [Size]float64
+type Float [Len]float64
 
 var _ io.Writer = (*Float)(nil)
 

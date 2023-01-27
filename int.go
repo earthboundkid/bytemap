@@ -7,7 +7,7 @@ import (
 )
 
 // Int is an array backed map from byte to integer.
-type Int [Size]int
+type Int [Len]int
 
 var _ io.Writer = (*Int)(nil)
 
