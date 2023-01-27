@@ -2,6 +2,9 @@ package bytemap
 
 import (
 	"io"
+	"strings"
+	"unicode"
+	"unicode/utf8"
 )
 
 // Bool is an array backed map from byte to bool.
@@ -103,4 +106,25 @@ func (m *Bool) Get(key byte) bool {
 func (m *Bool) Clone() *Bool {
 	m2 := *m
 	return &m2
+}
+
+func (m *Bool) String() string {
+	var buf strings.Builder
+	buf.Grow(Len + len("Bool()"))
+	buf.WriteString("Bool(")
+	for i := 0; i < Len; i++ {
+		if !m[i] {
+			buf.WriteString("_")
+			continue
+		}
+		c := byte(i)
+		b := []byte{c}
+		if utf8.Valid(b) && unicode.IsPrint(rune(c)) && c != '_' {
+			buf.Write(b)
+		} else {
+			buf.WriteString(".")
+		}
+	}
+	buf.WriteString(")")
+	return buf.String()
 }
