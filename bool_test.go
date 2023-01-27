@@ -23,6 +23,10 @@ func naiveMap(charset string) map[byte]bool {
 
 func naiveContains(s, charset string) bool {
 	m := naiveMap(charset)
+	return naiveMapContains(m, s)
+}
+
+func naiveMapContains(m map[byte]bool, s string) bool {
 	for _, c := range []byte(s) {
 		if !m[c] {
 			return false
