@@ -110,6 +110,21 @@ var testStrings = []string{
 	"987654321",
 }
 
+func BenchmarkLoop(b *testing.B) {
+	var match bool
+	for i := 0; i < b.N; i++ {
+		s := testStrings[i%len(testStrings)]
+		match = true
+		for _, c := range []byte(s) {
+			if c < '0' || c > '9' {
+				match = false
+				break
+			}
+		}
+	}
+	globalMatch = match
+}
+
 func BenchmarkRegexp(b *testing.B) {
 	r := regexp.MustCompile(`^[0-9]*$`)
 	b.ResetTimer()
