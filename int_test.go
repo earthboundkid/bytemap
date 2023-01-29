@@ -9,7 +9,7 @@ import (
 	"golang.org/x/exp/maps"
 )
 
-func FuzzMakeBitField(f *testing.F) {
+func FuzzInt(f *testing.F) {
 	f.Add("", "")
 	f.Add("a", "a")
 	f.Add("a", "b")
@@ -25,12 +25,8 @@ func FuzzMakeBitField(f *testing.F) {
 	}
 	f.Fuzz(func(t *testing.T, s, charset string) {
 		want := naiveContains(s, charset)
-		t.Run("Make", func(t *testing.T) {
-			m := bytemap.Make(charset).ToBitField()
-			testContainment(t, m, s, charset, want)
-		})
 		t.Run("WriteString", func(t *testing.T) {
-			m := &bytemap.BitField{}
+			m := &bytemap.Int{}
 			n, err := m.WriteString(charset)
 			if err != nil {
 				t.Fatal(err)
@@ -41,7 +37,7 @@ func FuzzMakeBitField(f *testing.F) {
 			testContainment(t, m, s, charset, want)
 		})
 		t.Run("Write", func(t *testing.T) {
-			m := &bytemap.BitField{}
+			m := &bytemap.Int{}
 			n, err := m.Write([]byte(charset))
 			if err != nil {
 				t.Fatal(err)
@@ -53,7 +49,7 @@ func FuzzMakeBitField(f *testing.F) {
 		})
 		// Test io.Copy
 		t.Run("Copy", func(t *testing.T) {
-			m := &bytemap.BitField{}
+			m := &bytemap.Int{}
 			n64, err := io.Copy(m, strings.NewReader(charset))
 			if err != nil {
 				t.Fatal(err)
@@ -66,58 +62,36 @@ func FuzzMakeBitField(f *testing.F) {
 	})
 }
 
-func FuzzBitFieldToMap(f *testing.F) {
-	f.Add("", "")
-	f.Add("a", "b")
-	f.Add(
-		"the quick brown fox jumps over a lazy dog.",
-		"abcdefghijklmnopqrstuvwxyz. ",
-	)
-	f.Fuzz(func(t *testing.T, a, b string) {
-		aNaive := naiveMap(a)
-		aMap := bytemap.Make(a).ToBitField()
-		if !maps.Equal(aNaive, aMap.ToMap()) {
-			t.Fatalf("input=%q want=%v got=%v",
-				a, aNaive, aMap.ToMap())
-		}
-		testGet(t, aMap, aNaive)
-		bNaive := naiveMap(b)
-		bMap := bytemap.Make(b).ToBitField()
-		if !maps.Equal(bNaive, bMap.ToMap()) {
-			t.Fatal(b, bMap)
-		}
-		testGet(t, bMap, bNaive)
-		if maps.Equal(aNaive, bNaive) != aMap.Equals(bMap) {
-			t.Fatal(aMap, bMap)
-		}
-	})
-}
-
-func FuzzBitFieldSet(f *testing.F) {
+func FuzzIntSet(f *testing.F) {
 	f.Add("", "", "")
 	f.Add("a", "a", "a")
 	f.Add("abc", "bcde", "b")
 	f.Fuzz(func(t *testing.T, add, remove, restore string) {
-		var bf bytemap.BitField
-		m := make(map[byte]bool)
+		var mInt bytemap.Int
+		m := make(map[byte]int)
 		for _, c := range []byte(add) {
-			bf.Set(c, true)
-			m[c] = true
+			mInt.Set(c, 1)
+			m[c] = 1
 		}
 		for _, c := range []byte(remove) {
-			bf.Set(c, false)
-			m[c] = false
+			mInt.Set(c, 0)
+			m[c] = 0
 		}
 		for _, c := range []byte(restore) {
-			bf.Set(c, true)
-			m[c] = true
+			mInt.Set(c, 1)
+			m[c] = 1
 		}
 		// Fill in blanks
 		for i := 0; i < bytemap.Len; i++ {
 			m[byte(i)] = m[byte(i)]
 		}
-		if !maps.Equal(bf.ToMap(), m) {
-			t.Fatal(bf)
+		for i := 0; i < bytemap.Len; i++ {
+			if mInt.Get(byte(i)) != m[byte(i)] {
+				t.Fatal(i, mInt.Get(byte(i)), m[byte(i)])
+			}
+		}
+		if !maps.Equal(mInt.ToMap(), m) {
+			t.Fatal(mInt)
 		}
 	})
 }

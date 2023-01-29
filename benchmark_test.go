@@ -159,7 +159,7 @@ func BenchmarkBoolContains(b *testing.B) {
 }
 
 func BenchmarkBitFieldContains(b *testing.B) {
-	m := bytemap.MakeBitField("0123456789")
+	m := bytemap.Make("0123456789").ToBitField()
 	b.ResetTimer()
 	var match bool
 	for i := 0; i < b.N; i++ {

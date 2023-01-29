@@ -11,17 +11,6 @@ const BitFieldLen = Len / 8
 // it is 8 times smaller.
 type BitField [BitFieldLen]byte
 
-// MakeBitField initializes a BitField from a string or []byte seq.
-func MakeBitField[byteseq []byte | string](s byteseq) *BitField {
-	var m BitField
-	for _, c := range []byte(s) {
-		i := c / 8
-		mask := byte(1 << (c % 8))
-		m[i] |= mask
-	}
-	return &m
-}
-
 // Write satisfies io.Writer.
 func (m *BitField) Write(p []byte) (int, error) {
 	for _, c := range p {
@@ -123,5 +112,15 @@ func (m *BitField) Get(key byte) bool {
 // Clone copies m.
 func (m *BitField) Clone() *BitField {
 	m2 := *m
+	return &m2
+}
+
+func (m *BitField) ToBool() *Bool {
+	var m2 Bool
+	for c := 0; c < 256; c++ {
+		mask := byte(1 << (c % 8))
+		masked := m[c/8] & mask
+		m2[byte(c)] = masked != 0
+	}
 	return &m2
 }
