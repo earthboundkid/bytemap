@@ -36,17 +36,19 @@ m := bytemap.Make("0123456789")
 match := m.Contains(s)
 ```
 
-Take these benchmarks with a grain of salt, but they show a bytemap can actually perform as well or better than a handwritten loop:
+Take these benchmarks with a grain of salt, but they show a bytemap can actually perform as well as a handwritten loop:
 
 ```
 goos: darwin
 goarch: amd64
 pkg: github.com/carlmjohnson/bytemap
-BenchmarkLoop-8               165814047      7.959 ns/op
-BenchmarkRegexp-8               6136132    199.7 ns/op
-BenchmarkMapContains-8          7106398    168.3 ns/op
-BenchmarkBoolContains-8       172120761      6.784 ns/op
-BenchmarkBitFieldContains-8    73518219     16.89 ns/op
+BenchmarkLoop-8                  184966533       6.314 ns/op
+BenchmarkBoolContains-8          162605607       7.503 ns/op
+BenchmarkBitFieldContains-8       80200012      16.85 ns/op
+BenchmarkMapByteEmpty-8           53849732      23.19 ns/op
+BenchmarkMapByteBool-8             6663114     165.9 ns/op
+BenchmarkRegexp-8                  6080572     197.5 ns/op
+BenchmarkRegexpSlow-8               330384    3252 ns/op
 ```
 
 ## How does it work?

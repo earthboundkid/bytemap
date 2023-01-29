@@ -136,13 +136,41 @@ func BenchmarkRegexp(b *testing.B) {
 	globalMatch = match
 }
 
-func BenchmarkNaiveContains(b *testing.B) {
+func BenchmarkRegexpSlow(b *testing.B) {
+	var match bool
+	for i := 0; i < b.N; i++ {
+		s := testStrings[i%len(testStrings)]
+		match, _ = regexp.MatchString(`^[0-9]*$`, s)
+	}
+	globalMatch = match
+}
+
+func BenchmarkMapByteBool(b *testing.B) {
 	m := naiveMap("0123456789")
 	b.ResetTimer()
 	var match bool
 	for i := 0; i < b.N; i++ {
 		s := testStrings[i%len(testStrings)]
 		match = naiveMapContains(m, s)
+	}
+	globalMatch = match
+}
+
+func BenchmarkMapByteEmpty(b *testing.B) {
+	m := make(map[byte]struct{}, 10)
+	for _, c := range []byte("0123456789") {
+		m[c] = struct{}{}
+	}
+	b.ResetTimer()
+	var match bool
+	for i := 0; i < b.N; i++ {
+		s := testStrings[i%len(testStrings)]
+		match = true
+		for _, c := range []byte(s) {
+			if _, match = m[c]; match {
+				break
+			}
+		}
 	}
 	globalMatch = match
 }
