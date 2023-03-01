@@ -186,6 +186,16 @@ func BenchmarkBoolContains(b *testing.B) {
 	globalMatch = match
 }
 
+func BenchmarkBoolContainsSlow(b *testing.B) {
+	var match bool
+	for i := 0; i < b.N; i++ {
+		m := bytemap.Range('0', '9')
+		s := testStrings[i%len(testStrings)]
+		match = m.Contains(s)
+	}
+	globalMatch = match
+}
+
 func BenchmarkBitFieldContains(b *testing.B) {
 	m := bytemap.Make("0123456789").ToBitField()
 	b.ResetTimer()
