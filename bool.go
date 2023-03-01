@@ -167,13 +167,20 @@ func (m *Bool) ToBitField() *BitField {
 	return &bf
 }
 
-// Union constructs a new Bool containing the union of m1 and m2.
-func Union(m1, m2 *Bool) *Bool {
-	var m3 Bool
+// Union constructs a new Bool containing the union of the Bool bytemaps.
+func Union(ms ...*Bool) *Bool {
+	var m Bool
 	for i := 0; i < Len; i++ {
-		m3[i] = m1[i] || m2[i]
+		val := false
+		for j := range ms {
+			if ms[j][i] {
+				val = true
+				break
+			}
+		}
+		m[i] = val
 	}
-	return &m3
+	return &m
 }
 
 // Intersection constructs a new Bool containing the intersection of m1 and m2.
