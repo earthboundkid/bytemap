@@ -9,11 +9,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - uses: actions/setup-go@v3
+    - uses: actions/setup-go@v4
       with:
-        go-version: '^1.19'
-        cache: true
+        go-version: '1.21.0-rc.2'
     - name: Get dependencies
       run: go mod download
     - name: Test
-      run: go test -race -v ./...
+      run: go test -race -v -coverprofile=profile.cov ./...
+    - name: Upload Coverage
+      uses: shogo82148/actions-goveralls@v1
+      with:
+        path-to-profile: profile.cov

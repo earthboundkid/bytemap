@@ -1,9 +1,9 @@
 package bytemap
 
 import (
+	"cmp"
 	"io"
-
-	"golang.org/x/exp/slices"
+	"slices"
 )
 
 // Int is an array backed map from byte to integer.
@@ -122,8 +122,8 @@ func (m *Int) MostCommon() []IntN {
 	for i, n := range m {
 		freqs[i] = IntN{byte(i), n}
 	}
-	slices.SortStableFunc(freqs, func(a, b IntN) bool {
-		return a.N > b.N
+	slices.SortStableFunc(freqs, func(a, b IntN) int {
+		return cmp.Compare(b.N, a.N)
 	})
 	return freqs
 }
