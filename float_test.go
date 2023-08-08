@@ -2,11 +2,11 @@ package bytemap_test
 
 import (
 	"io"
+	"maps"
 	"strings"
 	"testing"
 
 	"github.com/carlmjohnson/bytemap"
-	"golang.org/x/exp/maps"
 )
 
 func FuzzFloat(f *testing.F) {

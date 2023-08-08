@@ -1,9 +1,9 @@
 package bytemap
 
 import (
+	"cmp"
 	"io"
-
-	"golang.org/x/exp/slices"
+	"slices"
 )
 
 // Float is an array backed map from byte to float64.
@@ -124,8 +124,8 @@ func (m *Float) MostCommon() []FloatN {
 	for i, n := range m {
 		freqs[i] = FloatN{byte(i), n}
 	}
-	slices.SortStableFunc(freqs, func(a, b FloatN) bool {
-		return a.N > b.N
+	slices.SortStableFunc(freqs, func(a, b FloatN) int {
+		return cmp.Compare(b.N, a.N)
 	})
 	return freqs
 }
