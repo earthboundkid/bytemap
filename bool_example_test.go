@@ -3,7 +3,7 @@ package bytemap_test
 import (
 	"fmt"
 
-	"github.com/carlmjohnson/bytemap"
+	"github.com/earthboundkid/bytemap/v2"
 )
 
 func ExampleRange() {

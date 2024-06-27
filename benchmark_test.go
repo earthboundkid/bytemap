@@ -7,7 +7,7 @@ import (
 	"regexp"
 	"testing"
 
-	"github.com/carlmjohnson/bytemap"
+	"github.com/earthboundkid/bytemap/v2"
 )
 
 var globalNaive map[byte]bool
@@ -19,7 +19,7 @@ func BenchmarkNaive(b *testing.B) {
 	}
 	s := string(data)
 	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
+	for range b.N {
 		globalNaive = naiveMap(s)
 	}
 }
@@ -33,7 +33,7 @@ func BenchmarkBoolCopy(b *testing.B) {
 	}
 	var m bytemap.Bool
 	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
+	for range b.N {
 		_, err = io.Copy(&m, bytes.NewReader(data))
 		if err != nil {
 			b.Fatal(err)
@@ -50,7 +50,7 @@ func BenchmarkBoolWriteString(b *testing.B) {
 	s := string(data)
 	var m bytemap.Bool
 	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
+	for range b.N {
 		m.WriteString(s)
 	}
 	globalBool = &m
@@ -63,7 +63,7 @@ func BenchmarkBoolWrite(b *testing.B) {
 	}
 	var m bytemap.Bool
 	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
+	for range b.N {
 		m.Write(data)
 	}
 	globalBool = &m
@@ -78,7 +78,7 @@ func BenchmarkBitFieldCopy(b *testing.B) {
 	}
 	var m bytemap.BitField
 	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
+	for range b.N {
 		_, err = io.Copy(&m, bytes.NewReader(data))
 		if err != nil {
 			b.Fatal(err)
@@ -95,7 +95,7 @@ func BenchmarkBitFieldWriteString(b *testing.B) {
 	s := string(data)
 	var m bytemap.BitField
 	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
+	for range b.N {
 		m.WriteString(s)
 	}
 	globalBitField = &m
@@ -112,7 +112,7 @@ var testStrings = []string{
 
 func BenchmarkLoop(b *testing.B) {
 	var match bool
-	for i := 0; i < b.N; i++ {
+	for i := range b.N {
 		s := testStrings[i%len(testStrings)]
 		match = true
 		for _, c := range []byte(s) {
@@ -129,7 +129,7 @@ func BenchmarkRegexp(b *testing.B) {
 	r := regexp.MustCompile(`^[0-9]*$`)
 	b.ResetTimer()
 	var match bool
-	for i := 0; i < b.N; i++ {
+	for i := range b.N {
 		s := testStrings[i%len(testStrings)]
 		match = r.MatchString(s)
 	}
@@ -138,7 +138,7 @@ func BenchmarkRegexp(b *testing.B) {
 
 func BenchmarkRegexpSlow(b *testing.B) {
 	var match bool
-	for i := 0; i < b.N; i++ {
+	for i := range b.N {
 		s := testStrings[i%len(testStrings)]
 		match, _ = regexp.MatchString(`^[0-9]*$`, s)
 	}
@@ -149,7 +149,7 @@ func BenchmarkMapByteBool(b *testing.B) {
 	m := naiveMap("0123456789")
 	b.ResetTimer()
 	var match bool
-	for i := 0; i < b.N; i++ {
+	for i := range b.N {
 		s := testStrings[i%len(testStrings)]
 		match = naiveMapContains(m, s)
 	}
@@ -163,9 +163,8 @@ func BenchmarkMapByteEmpty(b *testing.B) {
 	}
 	b.ResetTimer()
 	var match bool
-	for i := 0; i < b.N; i++ {
+	for i := range b.N {
 		s := testStrings[i%len(testStrings)]
-		match = true
 		for _, c := range []byte(s) {
 			if _, match = m[c]; match {
 				break
@@ -179,7 +178,7 @@ func BenchmarkBoolContains(b *testing.B) {
 	m := bytemap.Make("0123456789")
 	b.ResetTimer()
 	var match bool
-	for i := 0; i < b.N; i++ {
+	for i := range b.N {
 		s := testStrings[i%len(testStrings)]
 		match = m.Contains(s)
 	}
@@ -188,7 +187,7 @@ func BenchmarkBoolContains(b *testing.B) {
 
 func BenchmarkBoolContainsSlow(b *testing.B) {
 	var match bool
-	for i := 0; i < b.N; i++ {
+	for i := range b.N {
 		m := bytemap.Range('0', '9')
 		s := testStrings[i%len(testStrings)]
 		match = m.Contains(s)
@@ -200,7 +199,7 @@ func BenchmarkBitFieldContains(b *testing.B) {
 	m := bytemap.Make("0123456789").ToBitField()
 	b.ResetTimer()
 	var match bool
-	for i := 0; i < b.N; i++ {
+	for i := range b.N {
 		s := testStrings[i%len(testStrings)]
 		match = m.Contains(s)
 	}

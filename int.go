@@ -1,9 +1,7 @@
 package bytemap
 
 import (
-	"cmp"
 	"io"
-	"slices"
 )
 
 // Int is an array backed map from byte to integer.
@@ -108,24 +106,6 @@ func (m *Int) Set(key byte, value int) {
 // Get looks up one byte in the Int byte map.
 func (m *Int) Get(key byte) int {
 	return m[key]
-}
-
-type IntN struct {
-	Byte byte
-	N    int
-}
-
-// MostCommon returns a slice of character counts for m
-// from highest count to lowest.
-func (m *Int) MostCommon() []IntN {
-	freqs := make([]IntN, len(m))
-	for i, n := range m {
-		freqs[i] = IntN{byte(i), n}
-	}
-	slices.SortStableFunc(freqs, func(a, b IntN) int {
-		return cmp.Compare(b.N, a.N)
-	})
-	return freqs
 }
 
 // Clone copies m.
