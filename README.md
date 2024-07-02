@@ -1,4 +1,4 @@
-# bytemap [![GoDoc](https://godoc.org/github.com/carlmjohnson/bytemap?status.svg)](https://godoc.org/github.com/carlmjohnson/bytemap) [![Go Report Card](https://goreportcard.com/badge/github.com/carlmjohnson/bytemap)](https://goreportcard.com/report/github.com/carlmjohnson/bytemap) [![Gocover.io](https://gocover.io/_badge/github.com/carlmjohnson/bytemap)](https://gocover.io/github.com/carlmjohnson/bytemap)
+# bytemap [![GoDoc](https://godoc.org/github.com/earthboundkid/bytemap?status.svg)](https://godoc.org/github.com/earthboundkid/bytemap/v2) [![Go Report Card](https://goreportcard.com/badge/github.com/earthboundkid/bytemap)](https://goreportcard.com/report/github.com/earthboundkid/bytemap) [![Coverage Status](https://coveralls.io/repos/github/earthboundkid/bytemap/badge.svg)](https://coveralls.io/github/earthboundkid/bytemap)
 
 Bytemap contains types for making maps from bytes to bool, integer, or float using a backing array.
 
@@ -36,19 +36,19 @@ m := bytemap.Make("0123456789")
 match := m.Contains(s)
 ```
 
-Take these benchmarks with a grain of salt, but they show a bytemap can actually perform as well as a handwritten loop:
+Take these benchmarks with a grain of salt, but they show a bytemap can actually perform as well as a handwritten loop or better:
 
 ```
 goos: darwin
 goarch: amd64
-pkg: github.com/carlmjohnson/bytemap
-BenchmarkLoop-8                  184966533       6.314 ns/op
-BenchmarkBoolContains-8          162605607       7.503 ns/op
-BenchmarkBitFieldContains-8       80200012      16.85 ns/op
-BenchmarkMapByteEmpty-8           53849732      23.19 ns/op
-BenchmarkMapByteBool-8             6663114     165.9 ns/op
-BenchmarkRegexp-8                  6080572     197.5 ns/op
-BenchmarkRegexpSlow-8               330384    3252 ns/op
+pkg: github.com/earthboundkid/bytemap
+BenchmarkBoolContains-8         318648963        3.762 ns/op
+BenchmarkBitFieldContains-8     216729614        5.526 ns/op
+BenchmarkLoop-8                 170478852        6.954 ns/op
+BenchmarkMapByteEmpty-8         143119087        8.991 ns/op
+BenchmarkMapByteBool-8           19294774       61.44 ns/op
+BenchmarkRegexp-8                11613380      102.7 ns/op
+BenchmarkRegexpSlow-8              822931     1289 ns/op
 ```
 
 ## How does it work?

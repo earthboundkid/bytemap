@@ -5,7 +5,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/carlmjohnson/bytemap"
+	"github.com/earthboundkid/bytemap/v2"
 )
 
 func naiveMap(charset string) map[byte]bool {

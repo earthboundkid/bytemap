@@ -1,9 +1,7 @@
 package bytemap
 
 import (
-	"cmp"
 	"io"
-	"slices"
 )
 
 // Float is an array backed map from byte to float64.
@@ -115,19 +113,6 @@ func (m *Float) SetFrequencies() {
 	for i, n := range m {
 		m[i] = n / sum
 	}
-}
-
-// MostCommon returns a slice of character counts for m
-// from highest count to lowest.
-func (m *Float) MostCommon() []FloatN {
-	freqs := make([]FloatN, len(m))
-	for i, n := range m {
-		freqs[i] = FloatN{byte(i), n}
-	}
-	slices.SortStableFunc(freqs, func(a, b FloatN) int {
-		return cmp.Compare(b.N, a.N)
-	})
-	return freqs
 }
 
 // Clone copies m.
